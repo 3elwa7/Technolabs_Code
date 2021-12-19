@@ -1,0 +1,164 @@
+import pandas as pd
+pd.plotting.register_matplotlib_converters()
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+
+# Set up code checking
+import os
+if not os.path.exists("../input/fifa.csv"):
+    os.symlink("../input/data-for-datavis/fifa.csv", "../input/fifa.csv")  
+from learntools.core import binder
+binder.bind(globals())
+from learntools.data_viz_to_coder.ex1 import *
+print("Setup Complete")
+one = 1
+fifa_filepath = "../input/fifa.csv"
+
+# Read the file into a variable fifa_data
+fifa_data = pd.read_csv(fifa_filepath, index_col="Date", parse_dates=True)
+plt.figure(figsize=(16,6))
+
+# Line chart showing how FIFA rankings evolved over time
+sns.lineplot(data=fifa_data)
+import pandas as pd
+pd.plotting.register_matplotlib_converters()
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+print("Setup Complete")
+import os
+if not os.path.exists("../input/museum_visitors.csv"):
+    os.symlink("../input/data-for-datavis/museum_visitors.csv", "../input/museum_visitors.csv") 
+from learntools.core import binder
+binder.bind(globals())
+from learntools.data_viz_to_coder.ex2 import *
+print("Setup Complete")
+museum_filepath = "../input/museum_visitors.csv"
+
+# Fill in the line below to read the file into a variable museum_data
+museum_data = pd.read_csv(museum_filepath, index_col="Date", parse_dates=True
+museum_data.tail()
+ca_museum_jul18 = 2620
+print(ca_museum_jul18)
+# Fill in the line below: In October 2018, how many more visitors did Avila 
+# Adobe receive than the Firehouse Museum?
+avila_oct18 = 14658
+sns.lineplot(data=museum_data) # Your code here
+sns.lineplot(data=museum_data['Avila Adobe'], label="Avila Adobe") # Your code here
+import pandas as pd
+pd.plotting.register_matplotlib_converters()
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+print("Setup Complete")
+import os
+if not os.path.exists("../input/ign_scores.csv"):
+    os.symlink("../input/data-for-datavis/ign_scores.csv", "../input/ign_scores.csv") 
+from learntools.core import binder
+binder.bind(globals())
+from learntools.data_viz_to_coder.ex3 import *
+print("Setup Complete")
+ign_filepath = "../input/ign_scores.csv"
+
+# Fill in the line below to read the file into a variable ign_data
+ign_data = pd.read_csv(ign_filepath,index_col="Platform")
+high_score = 7.759930
+
+# Fill in the line below: On the Playstation Vita platform, which genre has the 
+# lowest average score? Please provide the name of the column, and put your answer 
+# in single quotes (e.g., 'Action', 'Adventure', 'Fighting', etc.)
+worst_genre = "Simulation"
+sns.barplot(x=ign_data.index, y=ign_data['Racing']) # Your code here
+sns.heatmap(data=ign_data, annot=True) # Your code here
+import pandas as pd
+pd.plotting.register_matplotlib_converters()
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+print("Setup Complete")
+import os
+if not os.path.exists("../input/candy.csv"):
+    os.symlink("../input/data-for-datavis/candy.csv", "../input/candy.csv") 
+from learntools.core import binder
+binder.bind(globals())
+from learntools.data_viz_to_coder.ex4 import *
+print("Setup Complete")
+candy_filepath = "../input/candy.csv"
+
+# Fill in the line below to read the file into a variable candy_data
+candy_data = pd.read_csv(candy_filepath,index_col = "id")
+more_popular = "3 Musketeers"
+
+# Fill in the line below: Which candy has higher sugar content: 'Air Heads'
+# or 'Baby Ruth'? (Please enclose your answer in single quotes.)
+more_sugar = "Air Heads"
+sns.scatterplot(x=candy_data['sugarpercent'], y=candy_data['winpercent']) # Your code here
+sns.lmplot(x="sugarpercent", y="winpercent", data=candy_data) # Your code here
+sns.lmplot(x="sugarpercent", y="winpercent",hue = "chocolate", data=candy_data)  # Your code here
+sns.lmplot(x="pricepercent", y="winpercent",hue = "chocolate", data=candy_data) # Your code here
+sns.swarmplot(x=candy_data['chocolate'], y=candy_data['winpercent']) # Your code here
+import pandas as pd
+pd.plotting.register_matplotlib_converters()
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+print("Setup Complete")
+import os
+if not os.path.exists("../input/cancer_b.csv"):
+    os.symlink("../input/data-for-datavis/cancer_b.csv", "../input/cancer_b.csv")
+    os.symlink("../input/data-for-datavis/cancer_m.csv", "../input/cancer_m.csv")
+from learntools.core import binder
+binder.bind(globals())
+from learntools.data_viz_to_coder.ex5 import *
+print("Setup Complete")
+cancer_b_filepath = "../input/cancer_b.csv"
+cancer_m_filepath = "../input/cancer_m.csv"
+
+# Fill in the line below to read the (benign) file into a variable cancer_b_data
+cancer_b_data =pd.read_csv(cancer_b_filepath,index_col="Id")
+
+# Fill in the line below to read the (malignant) file into a variable cancer_m_data
+cancer_m_data = pd.read_csv(cancer_m_filepath,index_col="Id")
+max_perim = 87.46
+
+# Fill in the line below: What is the value for 'Radius (mean)' for the tumor with Id 842517?
+mean_radius = 20.57
+
+sns.distplot(a=cancer_b_data['Area (mean)'], label="Id", kde=False)# Your code here (benign tumors)
+sns.distplot(a=cancer_m_data['Area (mean)'], label="Id", kde=False)# Your code here (benign tumors)
+
+sns.kdeplot(data=cancer_b_data['Radius (worst)'], shade=True) # Your code here (benign tumors)
+sns.kdeplot(data=cancer_m_data['Radius (worst)'], shade=True) # Your code here (benign tumors)
+ # Your code here (malignant tumors)
+ import pandas as pd
+pd.plotting.register_matplotlib_converters()
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+print("Setup Complete")
+import os
+if not os.path.exists("../input/spotify.csv"):
+    os.symlink("../input/data-for-datavis/spotify.csv", "../input/spotify.csv") 
+from learntools.core import binder
+binder.bind(globals())
+from learntools.data_viz_to_coder.ex6 import *
+print("Setup Complete")
+spotify_filepath = "../input/spotify.csv"
+
+# Read the file into a variable spotify_data
+spotify_data = pd.read_csv(spotify_filepath, index_col="Date", parse_dates=True)
+sns.set_style("dark")
+# Path of the file to read
+spotify_filepath = "../input/spotify.csv"
+
+# Read the file into a variable spotify_data
+spotify_data = pd.read_csv(spotify_filepath, index_col="Date", parse_dates=True)
+# Line chart 
+plt.figure(figsize=(12,6))
+sns.lineplot(data=spotify_data)
+# Set up code checking
+from learntools.core import binder
+binder.bind(globals())
+from learntools.data_viz_to_coder.ex7 import *
+print("Setup Complete")
