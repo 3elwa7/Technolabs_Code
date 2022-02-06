@@ -1,0 +1,927 @@
+# Set up code checking
+from learntools.core import binder
+binder.bind(globals())
+from learntools.machine_learning.ex2 import *
+print("Setup Complete")
+import pandas as pd
+
+# Path of the file to read
+iowa_file_path = '../input/home-data-for-ml-course/train.csv'
+
+# Fill in the line below to read the file into a variable home_data
+home_data = pd.read_csv(iowa_file_path)
+
+# Call line below with no argument to check that you've loaded the data correctly
+step_1.check()
+# Print summary statistics in next line
+home_data.describe
+# What is the average lot size (rounded to nearest integer)?
+avg_lot_size = 10517
+
+# As of today, how old is the newest home (current year - the date in which it was built)
+newest_home_age = 11
+
+# Checks your answers
+step_2.check()
+# Code you have previously used to load data
+import pandas as pd
+
+# Path of the file to read
+iowa_file_path = '../input/home-data-for-ml-course/train.csv'
+
+home_data = pd.read_csv(iowa_file_path)
+
+# Set up code checking
+from learntools.core import binder
+binder.bind(globals())
+from learntools.machine_learning.ex3 import *
+
+print("Setup Complete")
+print(home_data.head())
+y = home_data["SalePrice"]
+
+# Check your answer
+step_1.check()
+# Create the list of features below
+feature_names = ["1stFlrSF","2ndFlrSF","FullBath","BedroomAbvGr","YearBuilt","TotRmsAbvGrd","LotArea"]
+
+# Select data corresponding to features in feature_names
+X =home_data[feature_names]
+
+# Check your answer
+step_2.check()
+# from _ import _
+#specify the model.
+from sklearn.tree import DecisionTreeRegressor
+
+#For model reproducibility, set a numeric value for random_state when specifying the model
+iowa_model= DecisionTreeRegressor(random_state=1)
+
+
+# Fit the model
+iowa_model.fit(X,y)
+
+# Check your answer
+step_3.check()
+predictions = iowa_model.predict(X)
+print(predictions)
+
+# Check your answer
+step_4.check()
+# Code you have previously used to load data
+import pandas as pd
+from sklearn.tree import DecisionTreeRegressor
+
+# Path of the file to read
+iowa_file_path = '../input/home-data-for-ml-course/train.csv'
+
+home_data = pd.read_csv(iowa_file_path)
+y = home_data.SalePrice
+feature_columns = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
+X = home_data[feature_columns]
+
+# Specify Model
+iowa_model = DecisionTreeRegressor()
+# Fit Model
+iowa_model.fit(X, y)
+
+print("First in-sample predictions:", iowa_model.predict(X.head()))
+print("Actual target values for those homes:", y.head().tolist())
+
+# Set up code checking
+from learntools.core import binder
+binder.bind(globals())
+from learntools.machine_learning.ex4 import *
+print("Setup Complete")
+# Import the train_test_split function and uncomment
+# from _ import _
+from sklearn.model_selection import train_test_split
+
+# fill in and uncomment
+train_X, val_X, train_y, val_y = train_test_split(X, y, random_state = 1)
+
+# Check your answer
+step_1.check()
+# You imported DecisionTreeRegressor in your last exercise
+# and that code has been copied to the setup code above. So, no need to
+# import it again
+from sklearn.tree import DecisionTreeRegressor
+
+# Specify the model
+iowa_model = DecisionTreeRegressor(random_state=1)
+
+# Fit iowa_model with the training data.
+iowa_model.fit(train_X,train_y)
+
+# Check your answer
+step_2.check()
+# Predict with all validation observations
+val_predictions = iowa_model.predict(val_X)
+
+# Check your answer
+step_3.check()
+from sklearn.metrics import mean_absolute_error
+val_mae = mean_absolute_error(val_y , val_predictions)
+
+# uncomment following line to see the validation_mae
+#print(val_mae)
+
+# Check your answer
+step_4.check()
+# Code you have previously used to load data
+import pandas as pd
+from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+
+
+# Path of the file to read
+iowa_file_path = '../input/home-data-for-ml-course/train.csv'
+
+home_data = pd.read_csv(iowa_file_path)
+# Create target object and call it y
+y = home_data.SalePrice
+# Create X
+features = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
+X = home_data[features]
+
+# Split into validation and training data
+train_X, val_X, train_y, val_y = train_test_split(X, y, random_state=1)
+
+# Specify Model
+iowa_model = DecisionTreeRegressor(random_state=1)
+# Fit Model
+iowa_model.fit(train_X, train_y)
+
+# Make validation predictions and calculate mean absolute error
+val_predictions = iowa_model.predict(val_X)
+val_mae = mean_absolute_error(val_predictions, val_y)
+print("Validation MAE: {:,.0f}".format(val_mae))
+
+# Set up code checking
+from learntools.core import binder
+binder.bind(globals())
+from learntools.machine_learning.ex5 import *
+print("\nSetup complete")
+def get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y):
+    model = DecisionTreeRegressor(max_leaf_nodes=max_leaf_nodes, random_state=0)
+    model.fit(train_X, train_y)
+    preds_val = model.predict(val_X)
+    mae = mean_absolute_error(val_y, preds_val)
+    return(mae)
+candidate_max_leaf_nodes = [5, 25, 50, 100, 250, 500]
+# Write loop to find the ideal tree size from candidate_max_leaf_nodes
+for candidate_max_leaf_nodes in [5, 25, 50, 100, 250, 500]:
+    my_mae = get_mae(candidate_max_leaf_nodes, train_X, val_X, train_y, val_y)
+    print("candidate_max_leaf_nodes: %d  \t\t Mean Absolute Error:  %d" %(candidate_max_leaf_nodes, my_mae))
+
+# Store the best value of max_leaf_nodes (it will be either 5, 25, 50, 100, 250 or 500)
+best_tree_size = 100 
+
+# Check your answer
+step_1.check()
+# Fill in argument to make optimal size and uncomment
+final_model = DecisionTreeRegressor(max_leaf_nodes=100, random_state=1)
+
+# fit the final model and uncomment the next two lines
+final_model.fit(X, y)
+
+# Check your answer
+step_2.check()
+# Code you have previously used to load data
+import pandas as pd
+from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+
+
+# Path of the file to read
+iowa_file_path = '../input/home-data-for-ml-course/train.csv'
+
+home_data = pd.read_csv(iowa_file_path)
+# Create target object and call it y
+y = home_data.SalePrice
+# Create X
+features = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
+X = home_data[features]
+
+# Split into validation and training data
+train_X, val_X, train_y, val_y = train_test_split(X, y, random_state=1)
+
+# Specify Model
+iowa_model = DecisionTreeRegressor(random_state=1)
+# Fit Model
+iowa_model.fit(train_X, train_y)
+
+# Make validation predictions and calculate mean absolute error
+val_predictions = iowa_model.predict(val_X)
+val_mae = mean_absolute_error(val_predictions, val_y)
+print("Validation MAE when not specifying max_leaf_nodes: {:,.0f}".format(val_mae))
+
+# Using best value for max_leaf_nodes
+iowa_model = DecisionTreeRegressor(max_leaf_nodes=100, random_state=1)
+iowa_model.fit(train_X, train_y)
+val_predictions = iowa_model.predict(val_X)
+val_mae = mean_absolute_error(val_predictions, val_y)
+print("Validation MAE for best value of max_leaf_nodes: {:,.0f}".format(val_mae))
+
+
+# Set up code checking
+from learntools.core import binder
+binder.bind(globals())
+from learntools.machine_learning.ex6 import *
+print("\nSetup complete")
+from sklearn.ensemble import RandomForestRegressor
+
+# Define the model. Set random_state to 1
+rf_model = RandomForestRegressor(random_state = 1)
+
+# fit your model
+rf_model.fit(train_X,train_y)
+
+# Calculate the mean absolute error of your Random Forest model on the validation data
+rf = rf_model.predict(val_X)
+rf_val_mae = mean_absolute_error(val_y,rf)
+
+print("Validation MAE for Random Forest Model: {}".format(rf_val_mae))
+
+# Check your answer
+step_1.check()
+# Set up code checking
+from learntools.core import binder
+binder.bind(globals())
+from learntools.machine_learning.ex7 import *
+
+# Set up filepaths
+import os
+if not os.path.exists("../input/train.csv"):
+    os.symlink("../input/home-data-for-ml-course/train.csv", "../input/train.csv")  
+    os.symlink("../input/home-data-for-ml-course/test.csv", "../input/test.csv") 
+ # Import helpful libraries
+import pandas as pd
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import train_test_split
+
+# Load the data, and separate the target
+iowa_file_path = '../input/train.csv'
+home_data = pd.read_csv(iowa_file_path)
+y = home_data.SalePrice
+
+# Create X (After completing the exercise, you can return to modify this line!)
+features = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
+
+# Select columns corresponding to features, and preview the data
+X = home_data[features]
+X.head()
+
+# Split into validation and training data
+train_X, val_X, train_y, val_y = train_test_split(X, y, random_state=1)
+
+# Define a random forest model
+rf_model = RandomForestRegressor(random_state=1)
+rf_model.fit(train_X, train_y)
+rf_val_predictions = rf_model.predict(val_X)
+rf_val_mae = mean_absolute_error(rf_val_predictions, val_y)
+
+print("Validation MAE for Random Forest Model: {:,.0f}".format(rf_val_mae))
+# To improve accuracy, create a new Random Forest model which you will train on all training data
+rf_model_on_full_data = RandomForestRegressor()
+
+# fit rf_model_on_full_data on all data from the training data
+rf_model_on_full_data.fit(X,y)
+# path to file you will use for predictions
+test_data_path = '../input/test.csv'
+
+# read test data file using pandas
+test_data = pd.read_csv(test_data_path)
+
+# create test_X which comes from test_data but includes only the columns you used for prediction.
+# The list of columns is stored in a variable called features
+test_X = test_data[features]
+
+# make predictions which we will submit. 
+test_preds = rf_model_on_full_data.predict(test_X)
+# Run the code to save predictions in the format used for competition scoring
+
+output = pd.DataFrame({'Id': test_data.Id,
+                       'SalePrice': test_preds})
+output.to_csv('submission.csv', index=False)
+# Set up code checking
+import os
+if not os.path.exists("../input/train.csv"):
+    os.symlink("../input/home-data-for-ml-course/train.csv", "../input/train.csv")  
+    os.symlink("../input/home-data-for-ml-course/test.csv", "../input/test.csv")  
+from learntools.core import binder
+binder.bind(globals())
+from learntools.ml_intermediate.ex1 import *
+print("Setup Complete")
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Read the data
+X_full = pd.read_csv('../input/train.csv', index_col='Id')
+X_test_full = pd.read_csv('../input/test.csv', index_col='Id')
+
+# Obtain target and predictors
+y = X_full.SalePrice
+features = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
+X = X_full[features].copy()
+X_test = X_test_full[features].copy()
+
+# Break off validation set from training data
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, train_size=0.8, test_size=0.2,
+                                                      random_state=0)
+                                                      from sklearn.ensemble import RandomForestRegressor
+
+# Define the models
+model_1 = RandomForestRegressor(n_estimators=50, random_state=0)
+model_2 = RandomForestRegressor(n_estimators=100, random_state=0)
+model_3 = RandomForestRegressor(n_estimators=100, criterion='mae', random_state=0)
+model_4 = RandomForestRegressor(n_estimators=200, min_samples_split=20, random_state=0)
+model_5 = RandomForestRegressor(n_estimators=100, max_depth=7, random_state=0)
+
+models = [model_1, model_2, model_3, model_4, model_5]
+from sklearn.metrics import mean_absolute_error
+
+# Function for comparing different models
+def score_model(model, X_t=X_train, X_v=X_valid, y_t=y_train, y_v=y_valid):
+    model.fit(X_t, y_t)
+    preds = model.predict(X_v)
+    return mean_absolute_error(y_v, preds)
+
+for i in range(0, len(models)):
+    mae = score_model(models[i])
+    print("Model %d MAE: %d" % (i+1, mae))
+    # Fill in the best model
+best_model = model_3
+
+# Check your answer
+step_1.check()
+# Define a model
+my_model = RandomForestRegressor()  # Your code here
+
+# Check your answer
+step_2.check()
+# Fit the model to the training data
+my_model.fit(X, y)
+
+# Generate test predictions
+preds_test = my_model.predict(X_test)
+
+# Save predictions in format used for competition scoring
+output = pd.DataFrame({'Id': X_test.index,
+                       'SalePrice': preds_test})
+output.to_csv('submission.csv', index=False)
+# Set up code checking
+import os
+if not os.path.exists("../input/train.csv"):
+    os.symlink("../input/home-data-for-ml-course/train.csv", "../input/train.csv")  
+    os.symlink("../input/home-data-for-ml-course/test.csv", "../input/test.csv") 
+from learntools.core import binder
+binder.bind(globals())
+from learntools.ml_intermediate.ex2 import *
+print("Setup Complete")
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Read the data
+X_full = pd.read_csv('../input/train.csv', index_col='Id')
+X_test_full = pd.read_csv('../input/test.csv', index_col='Id')
+
+# Remove rows with missing target, separate target from predictors
+X_full.dropna(axis=0, subset=['SalePrice'], inplace=True)
+y = X_full.SalePrice
+X_full.drop(['SalePrice'], axis=1, inplace=True)
+
+# To keep things simple, we'll use only numerical predictors
+X = X_full.select_dtypes(exclude=['object'])
+X_test = X_test_full.select_dtypes(exclude=['object'])
+
+# Break off validation set from training data
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, train_size=0.8, test_size=0.2,
+                                                      random_state=0)
+                                                      # Shape of training data (num_rows, num_columns)
+print(X_train.shape)
+
+# Number of missing values in each column of training data
+missing_val_count_by_column = (X_train.isnull().sum())
+print(missing_val_count_by_column[missing_val_count_by_column > 0])
+# Fill in the line below: How many rows are in the training data?
+num_rows = 1168 
+
+# Fill in the line below: How many columns in the training data
+# have missing values?
+num_cols_with_missing = 3
+
+# Fill in the line below: How many missing entries are contained in 
+# all of the training data?
+tot_missing = 276
+
+# Check your answers
+step_1.a.check()
+# Check your answer (Run this code cell to receive credit!)
+step_1.b.check()
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error
+
+# Function for comparing different approaches
+def score_dataset(X_train, X_valid, y_train, y_valid):
+    model = RandomForestRegressor(n_estimators=100, random_state=0)
+    model.fit(X_train, y_train)
+    preds = model.predict(X_valid)
+    return mean_absolute_error(y_valid, preds)
+    # Fill in the line below: get names of columns with missing values
+var = ["LotFrontage","MasVnrArea",""] # Your code here
+cols_with_missing = [col for col in X_train.columns
+                     if X_train[col].isnull().any()]
+# Fill in the lines below: drop columns in training and validation data
+reduced_X_train = X_train.drop(cols_with_missing, axis=1)
+reduced_X_valid = X_valid.drop(cols_with_missing, axis=1)
+
+# Check your answers
+step_2.check()
+print("MAE (Drop columns with missing values):")
+print(score_dataset(reduced_X_train, reduced_X_valid, y_train, y_valid))
+from sklearn.impute import SimpleImputer
+
+# Fill in the lines below: imputation
+my_imputer = SimpleImputer() # Your code here
+imputed_X_train = pd.DataFrame(my_imputer.fit_transform(X_train))
+imputed_X_valid = pd.DataFrame(my_imputer.transform(X_valid))
+
+# Fill in the lines below: imputation removed column names; put them back
+imputed_X_train.columns = X_train.columns
+imputed_X_valid.columns = X_valid.columns
+
+# Check your answers
+step_3.a.check()
+print("MAE (Imputation):")
+print(score_dataset(imputed_X_train, imputed_X_valid, y_train, y_valid))
+final_imputer = SimpleImputer(strategy='median')
+final_X_train = pd.DataFrame(final_imputer.fit_transform(X_train))
+final_X_valid = pd.DataFrame(final_imputer.transform(X_valid))
+
+# Imputation removed column names; put them back
+final_X_train.columns = X_train.columns
+final_X_valid.columns = X_valid.columns
+# Check your answers
+step_4.a.check()
+# Define and fit model
+model = RandomForestRegressor(n_estimators=100, random_state=0)
+model.fit(final_X_train, y_train)
+
+# Get validation predictions and MAE
+preds_valid = model.predict(final_X_valid)
+print("MAE (Your approach):")
+print(mean_absolute_error(y_valid, preds_valid))
+# Fill in the line below: preprocess test data
+final_X_test = pd.DataFrame(final_imputer.transform(X_test))
+
+# Fill in the line below: get test predictions
+preds_test = model.predict(final_X_test)
+
+# Check your answers
+step_4.b.check()
+# Save test predictions to file
+output = pd.DataFrame({'Id': X_test.index,
+                       'SalePrice': preds_test})
+output.to_csv('submission.csv', index=False)
+# Set up code checking
+import os
+if not os.path.exists("../input/train.csv"):
+    os.symlink("../input/home-data-for-ml-course/train.csv", "../input/train.csv")  
+    os.symlink("../input/home-data-for-ml-course/test.csv", "../input/test.csv") 
+from learntools.core import binder
+binder.bind(globals())
+from learntools.ml_intermediate.ex3 import *
+print("Setup Complete")
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Read the data
+X = pd.read_csv('../input/train.csv', index_col='Id') 
+X_test = pd.read_csv('../input/test.csv', index_col='Id')
+
+# Remove rows with missing target, separate target from predictors
+X.dropna(axis=0, subset=['SalePrice'], inplace=True)
+y = X.SalePrice
+X.drop(['SalePrice'], axis=1, inplace=True)
+
+# To keep things simple, we'll drop columns with missing values
+cols_with_missing = [col for col in X.columns if X[col].isnull().any()] 
+X.drop(cols_with_missing, axis=1, inplace=True)
+X_test.drop(cols_with_missing, axis=1, inplace=True)
+
+# Break off validation set from training data
+X_train, X_valid, y_train, y_valid = train_test_split(X, y,
+                                                      train_size=0.8, test_size=0.2,
+                                                      random_state=0)
+                                                      from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error
+
+# function for comparing different approaches
+def score_dataset(X_train, X_valid, y_train, y_valid):
+    model = RandomForestRegressor(n_estimators=100, random_state=0)
+    model.fit(X_train, y_train)
+    preds = model.predict(X_valid)
+    return mean_absolute_error(y_valid, preds)
+    # Fill in the lines below: drop columns in training and validation data
+drop_X_train =  X_train.select_dtypes(exclude=['object'])
+drop_X_valid =  X_valid.select_dtypes(exclude=['object'])
+
+# Check your answers
+step_1.check()
+print("MAE from Approach 1 (Drop categorical variables):")
+print(score_dataset(drop_X_train, drop_X_valid, y_train, y_valid))
+print("Unique values in 'Condition2' column in training data:", X_train['Condition2'].unique())
+print("\nUnique values in 'Condition2' column in validation data:", X_valid['Condition2'].unique())
+# Categorical columns in the training data
+object_cols = [col for col in X_train.columns if X_train[col].dtype == "object"]
+
+# Columns that can be safely ordinal encoded
+good_label_cols = [col for col in object_cols if 
+                   set(X_valid[col]).issubset(set(X_train[col]))]
+        
+# Problematic columns that will be dropped from the dataset
+bad_label_cols = list(set(object_cols)-set(good_label_cols))
+        
+print('Categorical columns that will be ordinal encoded:', good_label_cols)
+print('\nCategorical columns that will be dropped from the dataset:', bad_label_cols)
+from sklearn.preprocessing import OrdinalEncoder
+
+# Drop categorical columns that will not be encoded
+label_X_train = X_train.drop(bad_label_cols, axis=1)
+label_X_valid = X_valid.drop(bad_label_cols, axis=1)
+# Apply ordinal encoder 
+var = OrdinalEncoder() # Your code here
+label_X_train[good_label_cols] = var.fit_transform(X_train[good_label_cols])
+label_X_valid[good_label_cols] = var.transform(X_valid[good_label_cols])   
+# Check your answer
+step_2.b.check()
+print("MAE from Approach 2 (Ordinal Encoding):") 
+print(score_dataset(label_X_train, label_X_valid, y_train, y_valid))
+# Get number of unique entries in each column with categorical data
+object_nunique = list(map(lambda col: X_train[col].nunique(), object_cols))
+d = dict(zip(object_cols, object_nunique))
+
+# Print number of unique entries by column, in ascending order
+sorted(d.items(), key=lambda x: x[1])
+# Fill in the line below: How many categorical variables in the training data
+# have cardinality greater than 10?
+high_cardinality_numcols = 3
+
+# Fill in the line below: How many columns are needed to one-hot encode the 
+# 'Neighborhood' variable in the training data?
+num_cols_neighborhood = 25
+
+# Check your answers
+step_3.a.check()
+# Fill in the line below: How many entries are added to the dataset by 
+# replacing the column with a one-hot encoding?
+OH_entries_added = 1e4*100 - 1e4
+
+# Fill in the line below: How many entries are added to the dataset by
+# replacing the column with an ordinal encoding?
+label_entries_added =  0
+
+# Check your answers
+step_3.b.check()
+# Columns that will be one-hot encoded
+low_cardinality_cols = [col for col in object_cols if X_train[col].nunique() < 10]
+
+# Columns that will be dropped from the dataset
+high_cardinality_cols = list(set(object_cols)-set(low_cardinality_cols))
+
+print('Categorical columns that will be one-hot encoded:', low_cardinality_cols)
+print('\nCategorical columns that will be dropped from the dataset:', high_cardinality_cols)
+from sklearn.preprocessing import OneHotEncoder
+# Apply one-hot encoder to each column with categorical data
+OH_encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
+OH_cols_train = pd.DataFrame(OH_encoder.fit_transform(X_train[low_cardinality_cols]))
+OH_cols_valid = pd.DataFrame(OH_encoder.transform(X_valid[low_cardinality_cols]))
+
+# One-hot encoding removed index; put it back
+OH_cols_train.index = X_train.index
+OH_cols_valid.index = X_valid.index
+
+# Remove categorical columns (will replace with one-hot encoding)
+num_X_train = X_train.drop(object_cols, axis=1)
+num_X_valid = X_valid.drop(object_cols, axis=1)
+
+# Add one-hot encoded columns to numerical features
+OH_X_train = pd.concat([num_X_train, OH_cols_train], axis=1)
+OH_X_valid = pd.concat([num_X_valid, OH_cols_valid], axis=1)
+# Check your answer
+step_4.check()
+print("MAE from Approach 3 (One-Hot Encoding):") 
+print(score_dataset(OH_X_train, OH_X_valid, y_train, y_valid))
+# Set up code checking
+import os
+if not os.path.exists("../input/train.csv"):
+    os.symlink("../input/home-data-for-ml-course/train.csv", "../input/train.csv")  
+    os.symlink("../input/home-data-for-ml-course/test.csv", "../input/test.csv") 
+from learntools.core import binder
+binder.bind(globals())
+from learntools.ml_intermediate.ex4 import *
+print("Setup Complete")
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Read the data
+X_full = pd.read_csv('../input/train.csv', index_col='Id')
+X_test_full = pd.read_csv('../input/test.csv', index_col='Id')
+
+# Remove rows with missing target, separate target from predictors
+X_full.dropna(axis=0, subset=['SalePrice'], inplace=True)
+y = X_full.SalePrice
+X_full.drop(['SalePrice'], axis=1, inplace=True)
+
+# Break off validation set from training data
+X_train_full, X_valid_full, y_train, y_valid = train_test_split(X_full, y, 
+                                                                train_size=0.8, test_size=0.2,
+                                                                random_state=0)
+
+# "Cardinality" means the number of unique values in a column
+# Select categorical columns with relatively low cardinality (convenient but arbitrary)
+categorical_cols = [cname for cname in X_train_full.columns if
+                    X_train_full[cname].nunique() < 10 and 
+                    X_train_full[cname].dtype == "object"]
+
+# Select numerical columns
+numerical_cols = [cname for cname in X_train_full.columns if 
+                X_train_full[cname].dtype in ['int64', 'float64']]
+
+# Keep selected columns only
+my_cols = categorical_cols + numerical_cols
+X_train = X_train_full[my_cols].copy()
+X_valid = X_valid_full[my_cols].copy()
+X_test = X_test_full[my_cols].copy()
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder,OrdinalEncoder
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error
+
+# Preprocessing for numerical data
+numerical_transformer = SimpleImputer(strategy='constant')
+
+# Preprocessing for categorical data
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))
+])
+
+# Bundle preprocessing for numerical and categorical data
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numerical_transformer, numerical_cols),
+        ('cat', categorical_transformer, categorical_cols)
+    ])
+
+# Define model
+model = RandomForestRegressor(n_estimators=100, random_state=0)
+
+# Bundle preprocessing and modeling code in a pipeline
+clf = Pipeline(steps=[('preprocessor', preprocessor),
+                      ('model', model)
+                     ])
+
+# Preprocessing of training data, fit model 
+clf.fit(X_train, y_train)
+
+# Preprocessing of validation data, get predictions
+preds = clf.predict(X_valid)
+
+print('MAE:', mean_absolute_error(y_valid, preds))
+# Preprocessing for numerical data
+numerical_transformer = SimpleImputer(strategy='constant')
+ # Your code here
+
+# Preprocessing for categorical data
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='constant')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))
+]) # Your code here
+
+# Bundle preprocessing for numerical and categorical data
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numerical_transformer, numerical_cols),
+        ('cat', categorical_transformer, categorical_cols)
+    ])
+
+# Define model
+model = RandomForestRegressor(n_estimators=100, random_state=0) # Your code here
+
+# Check your answer
+step_1.a.check()
+# Bundle preprocessing and modeling code in a pipeline
+my_pipeline = Pipeline(steps=[('preprocessor', preprocessor),
+                              ('model', model)
+                             ])
+
+# Preprocessing of training data, fit model 
+my_pipeline.fit(X_train, y_train)
+
+# Preprocessing of validation data, get predictions
+preds = my_pipeline.predict(X_valid)
+
+# Evaluate the model
+score = mean_absolute_error(y_valid, preds)
+print('MAE:', score)
+
+# Check your answer
+step_1.b.check()
+
+# Preprocessing of test data, fit model
+preds_test = my_pipeline.predict(X_test)
+
+# Check your answer
+step_2.check()
+# Save test predictions to file
+output = pd.DataFrame({'Id': X_test.index,
+                       'SalePrice': preds_test})
+output.to_csv('submission.csv', index=False)
+# Set up code checking
+import os
+if not os.path.exists("../input/train.csv"):
+    os.symlink("../input/home-data-for-ml-course/train.csv", "../input/train.csv")  
+    os.symlink("../input/home-data-for-ml-course/test.csv", "../input/test.csv") 
+from learntools.core import binder
+binder.bind(globals())
+from learntools.ml_intermediate.ex5 import *
+print("Setup Complete")
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Read the data
+train_data = pd.read_csv('../input/train.csv', index_col='Id')
+test_data = pd.read_csv('../input/test.csv', index_col='Id')
+
+# Remove rows with missing target, separate target from predictors
+train_data.dropna(axis=0, subset=['SalePrice'], inplace=True)
+y = train_data.SalePrice              
+train_data.drop(['SalePrice'], axis=1, inplace=True)
+
+# Select numeric columns only
+numeric_cols = [cname for cname in train_data.columns if train_data[cname].dtype in ['int64', 'float64']]
+X = train_data[numeric_cols].copy()
+X_test = test_data[numeric_cols].copy()
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+
+my_pipeline = Pipeline(steps=[
+    ('preprocessor', SimpleImputer()),
+    ('model', RandomForestRegressor(n_estimators=50, random_state=0))
+])
+from sklearn.model_selection import cross_val_score
+
+# Multiply by -1 since sklearn calculates *negative* MAE
+scores = -1 * cross_val_score(my_pipeline, X, y,
+                              cv=5,
+                              scoring='neg_mean_absolute_error')
+
+print("Average MAE score:", scores.mean())
+def get_score(n_estimators):
+    my_pipeline = Pipeline(steps=[
+        ('preprocessor', SimpleImputer()),
+        ('model', RandomForestRegressor(n_estimators, random_state=0))
+    ])
+    scores = -1 * cross_val_score(my_pipeline, X, y,
+                                  cv=3,
+                                  scoring='neg_mean_absolute_error')
+    return scores.mean()
+    # Replace this body with your own code
+    pass
+
+# Check your answer
+step_1.check()
+results = {}
+for i in range(1,9):
+    results[50*i] = get_score(50*i)
+# Check your answer
+step_2.check()
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+plt.plot(list(results.keys()), list(results.values()))
+plt.show()
+n_estimators_best = 200
+
+# Check your answer
+step_3.check()
+# Set up code checking
+import os
+if not os.path.exists("../input/train.csv"):
+    os.symlink("../input/home-data-for-ml-course/train.csv", "../input/train.csv")  
+    os.symlink("../input/home-data-for-ml-course/test.csv", "../input/test.csv") 
+from learntools.core import binder
+binder.bind(globals())
+from learntools.ml_intermediate.ex6 import *
+print("Setup Complete")
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Read the data
+X = pd.read_csv('../input/train.csv', index_col='Id')
+X_test_full = pd.read_csv('../input/test.csv', index_col='Id')
+
+# Remove rows with missing target, separate target from predictors
+X.dropna(axis=0, subset=['SalePrice'], inplace=True)
+y = X.SalePrice              
+X.drop(['SalePrice'], axis=1, inplace=True)
+
+# Break off validation set from training data
+X_train_full, X_valid_full, y_train, y_valid = train_test_split(X, y, train_size=0.8, test_size=0.2,
+                                                                random_state=0)
+
+# "Cardinality" means the number of unique values in a column
+# Select categorical columns with relatively low cardinality (convenient but arbitrary)
+low_cardinality_cols = [cname for cname in X_train_full.columns if X_train_full[cname].nunique() < 10 and 
+                        X_train_full[cname].dtype == "object"]
+
+# Select numeric columns
+numeric_cols = [cname for cname in X_train_full.columns if X_train_full[cname].dtype in ['int64', 'float64']]
+
+# Keep selected columns only
+my_cols = low_cardinality_cols + numeric_cols
+X_train = X_train_full[my_cols].copy()
+X_valid = X_valid_full[my_cols].copy()
+X_test = X_test_full[my_cols].copy()
+
+# One-hot encode the data (to shorten the code, we use pandas)
+X_train = pd.get_dummies(X_train)
+X_valid = pd.get_dummies(X_valid)
+X_test = pd.get_dummies(X_test)
+X_train, X_valid = X_train.align(X_valid, join='left', axis=1)
+X_train, X_test = X_train.align(X_test, join='left', axis=1)
+from xgboost import XGBRegressor
+
+# Define the model
+my_model_1 = XGBRegressor(random_state=0) # Your code here
+
+# Fit the model
+my_model_1.fit(X_train, y_train) # Your code here
+
+# Check your answer
+step_1.a.check()
+from sklearn.metrics import mean_absolute_error
+
+# Get predictions
+predictions_1 = my_model_1.predict(X_valid) # Your code here
+
+# Check your answer
+step_1.b.check()
+# Calculate MAE
+mae_1 = mean_absolute_error(predictions_1, y_valid) # Your code here
+
+# Uncomment to print MAE
+# print("Mean Absolute Error:" , mae_1)
+
+# Check your answer
+step_1.c.check()
+# Define the model
+my_model_2 = XGBRegressor(n_estimators=1000, learning_rate=0.05)
+
+# Fit the model
+my_model_2.fit(X_train, y_train)
+
+# Get predictions
+predictions_2 = my_model_2.predict(X_valid)
+
+# Calculate MAE
+mae_2 = mean_absolute_error(predictions_2, y_valid)
+print("Mean Absolute Error:" , mae_2)
+
+# Check your answer
+step_2.check()
+# Define the model
+my_model_3 = XGBRegressor(n_estimators=1)
+
+# Fit the model
+my_model_3.fit(X_train, y_train)
+
+# Get predictions
+predictions_3 = my_model_3.predict(X_valid)
+
+# Calculate MAE
+mae_3 = mean_absolute_error(predictions_3, y_valid)
+print("Mean Absolute Error:" , mae_3)
+
+# Check your answer
+step_3.check()
+# Set up code checking
+from learntools.core import binder
+binder.bind(globals())
+from learntools.ml_intermediate.ex7 import *
+print("Setup Complete")
+# Fill in the line below with one of 1, 2, 3 or 4.
+potential_leakage_feature = 2
+
+# Check your answer
+q_5.check()
+    
